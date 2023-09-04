@@ -48,7 +48,7 @@ h1 {
   background-color: white;
 }
 .btn-close {
-  margin: 0;
+  margin: 10;
   border: 0;
   padding: 0;
   background: hsl(250, 250, 250);
