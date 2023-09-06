@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Code Scanner</title>
-    <!-- Include the html5-qrcode library -->
-    <script src="https://cdn.rawgit.com/edi9999/jsqrcode/v0.7.0/dist/html5-qrcode.min.js"></script>
+    <!-- Include the qrcode-scanner library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-scanner/dist/qrcode-scanner.min.js"></script>
 </head>
 <body>
     <h1>QR Code Scanner</h1>
@@ -27,13 +27,11 @@
         }
         
         // Initialize the QR code scanner
-        const html5QrCode = new Html5Qrcode("qr-video");
-        html5QrCode.start(
-            { facingMode: "environment" }, // Use the rear camera for mobile devices
-            { fps: 10 }, // Set the frames per second
-            onScanSuccess // Callback function to handle the result
-        );
+        const scanner = new QrScanner(document.getElementById("qr-video"), result => {
+            onScanSuccess(result);
+            scanner.stop();
+        });
+        scanner.start();
     </script>
 </body>
 </html>
-
