@@ -1,27 +1,39 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Code Scanner</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
-    <link rel="stylesheet" href="src/styles.css" />
-    <script src="https://rawgit.com/sitepoint-editors/jsqrcode/master/src/qr_packed.js"></script>
-  </head>
-
-  <body>
-    <div id="container">
-      <a id="btn-scan-qr">
-        <h1>Escanejar la pista</h1>
-      <a/>
-      <canvas id="qr-canvas"></canvas>
-
-      <div id="qr-result" hidden="">
-       <span id="outputData">hola</span>
+    <!-- Include the html5-qrcode library -->
+    <script src="https://cdn.rawgit.com/edi9999/jsqrcode/v0.7.0/dist/html5-qrcode.min.js"></script>
+</head>
+<body>
+    <h1>QR Code Scanner</h1>
+    
+    <!-- Create a video element for the camera feed -->
+    <video id="qr-video" width="300" height="300" autoplay></video>
+    
+    <!-- Create an image element to display the scanned result -->
+    <img id="qr-image" src="" alt="QR Code Result" style="display: none;">
+    
+    <!-- JavaScript code to initialize the QR code scanner -->
+    <script>
+        // Function to handle the QR code scan result
+        function onScanSuccess(qrCodeMessage) {
+            // Display the scanned QR code result as an image
+            const qrImage = document.getElementById("qr-image");
+            qrImage.src = qrCodeMessage;
+            qrImage.style.display = "block";
+        }
         
-      </div>
-        <button class="btn-close" onclick="window.close()"><h2><</h2></button>
-    </div>
-
-    <script src="./src/qrCodeScanner.js"></script>
-  </body>
+        // Initialize the QR code scanner
+        const html5QrCode = new Html5Qrcode("qr-video");
+        html5QrCode.start(
+            { facingMode: "environment" }, // Use the rear camera for mobile devices
+            { fps: 10 }, // Set the frames per second
+            onScanSuccess // Callback function to handle the result
+        );
+    </script>
+</body>
 </html>
+
