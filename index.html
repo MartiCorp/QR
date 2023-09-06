@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Code Scanner</title>
-    <!-- Include the qrcode-scanner library -->
-    <script src="https://cdn.jsdelivr.net/npm/qrcode-scanner/dist/qrcode-scanner.min.js"></script>
+    <!-- Include the zxing-js/library library -->
+    <script src="https://cdn.jsdelivr.net/npm/zxing-js/library@0.17.1/dist/zxing.min.js"></script>
 </head>
 <body>
     <h1>QR Code Scanner</h1>
@@ -13,25 +13,35 @@
     <!-- Create a video element for the camera feed -->
     <video id="qr-video" width="300" height="300" autoplay></video>
     
-    <!-- Create an image element to display the scanned result -->
-    <img id="qr-image" src="" alt="QR Code Result" style="display: none;">
+    <!-- Create an element to display the scanned result -->
+    <div id="qr-result"></div>
     
     <!-- JavaScript code to initialize the QR code scanner -->
     <script>
         // Function to handle the QR code scan result
         function onScanSuccess(qrCodeMessage) {
-            // Display the scanned QR code result as an image
-            const qrImage = document.getElementById("qr-image");
-            qrImage.src = qrCodeMessage;
-            qrImage.style.display = "block";
+            // Display the scanned QR code result
+            document.getElementById("qr-result").textContent = qrCodeMessage;
         }
         
         // Initialize the QR code scanner
-        const scanner = new QrScanner(document.getElementById("qr-video"), result => {
-            onScanSuccess(result);
-            scanner.stop();
-        });
-        scanner.start();
+        const videoElement = document.getElementById("qr-video");
+        const qrResultElement = document.getElementById("qr-result");
+        
+        const codeReader = new ZXing.BrowserQRCodeReader();
+        
+        codeReader
+            .decodeFromInputVideoDevice(undefined, videoElement, (result, err) => {
+                if (result) {
+                    onScanSuccess(result.text);
+                }
+                if (err && !(err instanceof ZXing.NotFoundException)) {
+                    console.error(err);
+                }
+            })
+            .catch(err => {
+                console.error(err);
+            });
     </script>
 </body>
 </html>
